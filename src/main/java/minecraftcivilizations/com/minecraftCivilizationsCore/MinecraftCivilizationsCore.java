@@ -14,6 +14,9 @@ import minecraftcivilizations.com.minecraftCivilizationsCore.ProtocolLib.PacketM
 import minecraftcivilizations.com.minecraftCivilizationsCore.Recipe.RecipeListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 @Getter
@@ -44,15 +47,19 @@ public final class MinecraftCivilizationsCore extends JavaPlugin {
 
         PacketManager.init();
 
+        Supplier<Map<String, Object>> dbDefaults = () -> {
+            Map<String, Object> data = new HashMap<>();
+            data.put("HOST", "localhost");
+            data.put("PORT", "5432");
+            data.put("DATABASE", "postgres");
+            data.put("USERNAME", "postgres");
+            data.put("PASSWORD", "pass");
+            return data;
+        };
+
         dbConfigFile = new ConfigFile(this,
                 "db",
-                "Database Configuration, if not understood please contact the developer. MCCore uses PostgresQL!", fields -> {
-            fields.add(new Pair<>("HOST", "localhost"));
-            fields.add(new Pair<>("PORT", 5432));
-            fields.add(new Pair<>("DATABASE", "postgres"));
-            fields.add(new Pair<>("USERNAME", "postgres"));
-            fields.add(new Pair<>("PASSWORD", "pass"));
-        }
+                dbDefaults
         );
 
 //        String jdbcUrl = "jdbc:postgresql://" +

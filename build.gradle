@@ -63,6 +63,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.typesafe:config:1.4.3'
     implementation "co.aikar:acf-paper:0.5.1-SNAPSHOT"
     shadow "co.aikar:acf-paper:0.5.1-SNAPSHOT"
     implementation 'org.postgresql:postgresql:42.7.7'
