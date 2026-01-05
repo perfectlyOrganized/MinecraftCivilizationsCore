@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.checkerframework.framework.qual.Unused;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,7 +29,10 @@ public class CustomPlayerManager implements Listener {
     @Getter
     @Setter
     private Consumer<Player> onPlayerJoin = player -> {
-        CustomPlayer customPlayer = load(player.getUniqueId());
+        CustomPlayer customPlayer = null;
+        try {
+            customPlayer = load(player.getUniqueId());
+        } catch (FileNotFoundException _e) {}
         if (customPlayer == null) {
             addCustomPlayer(new CustomPlayer(player.getUniqueId()));
         }
@@ -36,7 +40,10 @@ public class CustomPlayerManager implements Listener {
     @Getter
     @Setter
     private Consumer<AsyncPlayerPreLoginEvent> onPrePlayerJoin = player -> {
-        CustomPlayer customPlayer = load(player.getUniqueId());
+        CustomPlayer customPlayer = null;
+        try {
+            customPlayer = load(player.getUniqueId());
+        } catch (FileNotFoundException _e) {}
         if (customPlayer == null) {
             addCustomPlayer(new CustomPlayer(player.getUniqueId()));
         }
@@ -58,17 +65,15 @@ public class CustomPlayerManager implements Listener {
 
     }
 
-    public CustomPlayer load(String UUID) {
-        try (FileReader reader = new FileReader(MinecraftCivilizationsCore.getInstance().getDataFolder() + "/" + UUID + ".json")) {
-            CustomPlayer customPlayer = gson.fromJson(reader, customPlayerClass);
-            addCustomPlayer(customPlayer);
-            return customPlayer;
-        } catch (IOException e) {
-            return null;
-        }
+    public CustomPlayer load(String UUID) throws FileNotFoundException {
+        FileReader reader = new FileReader(MinecraftCivilizationsCore.getInstance().getDataFolder() + "/" + UUID + ".json");
+        CustomPlayer customPlayer = gson.fromJson(reader, customPlayerClass);
+        addCustomPlayer(customPlayer);
+        return customPlayer;
+
     }
 
-    public CustomPlayer load(UUID UUID) {
+    public CustomPlayer load(UUID UUID) throws FileNotFoundException {
         return load(UUID.toString());
     }
 
@@ -77,7 +82,7 @@ public class CustomPlayerManager implements Listener {
             String json = gson.toJson(MinecraftCivilizationsCore.getInstance().getCustomPlayerManager().getCustomPlayer(UUID), customPlayerClass);
             writer.write(json);
         } catch (IOException e) {
-            return;
+            MinecraftCivilizationsCore.logger.severe(String.format("Couldn't save %s custom player", UUID));
         }
     }
 
