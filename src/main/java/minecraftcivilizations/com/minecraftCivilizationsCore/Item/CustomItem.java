@@ -48,6 +48,15 @@ public class CustomItem {
         initializeEditingOfPersistentDataContainer();
     }
 
+    public CustomItem(@NotNull ItemStack item, @NotNull Component name) {
+        this.item = item;
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(name.decoration(TextDecoration.ITALIC, false));
+        meta.addItemFlags(ItemFlag.values());
+        item.setItemMeta(meta);
+        initializeEditingOfPersistentDataContainer();
+    }
+
     public static boolean isCustomItem(@NotNull ItemStack item) {
         return item.getPersistentDataContainer().has(CUSTOM_ITEM_KEY);
     }
