@@ -3,6 +3,7 @@ package minecraftcivilizations.com.minecraftCivilizationsCore.Config;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.typesafe.config.*;
+import lombok.Getter;
 import minecraftcivilizations.com.minecraftCivilizationsCore.Config.ConfigFilesManager;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +25,7 @@ public class ConfigFile {
     private final @NotNull Plugin plugin;
     private final @NotNull Logger logger;
     private final Supplier defaults;
+    @Getter
     private Config config;
     public <K,V> ConfigFile(@NotNull Plugin plugin, @NotNull String filename, @NotNull Supplier<Map<K, V>> defaults) {
         this.CONFIG_FILE = plugin.getDataFolder() + "/" + filename + ".json";
@@ -105,4 +107,5 @@ public class ConfigFile {
     public Config getObject(String key) {
         return config.getConfig(key);
     }
+
 }
