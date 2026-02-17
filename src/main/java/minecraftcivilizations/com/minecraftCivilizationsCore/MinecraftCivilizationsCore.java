@@ -36,14 +36,14 @@ public final class MinecraftCivilizationsCore extends JavaPlugin {
         setupCommands();
 
         guiManager = new GUIManager();
-        getServer().getPluginManager().registerEvents(guiManager, this);
+        //getServer().getPluginManager().registerEvents(guiManager, this);
 
         customPlayerManager = new CustomPlayerManager();
-        getServer().getPluginManager().registerEvents(customPlayerManager, this);
+       // getServer().getPluginManager().registerEvents(customPlayerManager, this);
 
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new RecipeListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerClickListener(), this);
+       // getServer().getPluginManager().registerEvents(new PlayerClickListener(), this);
 
         PacketManager.init();
 

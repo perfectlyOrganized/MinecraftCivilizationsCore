@@ -37,23 +37,10 @@ public class CustomPlayerManager implements Listener {
             addCustomPlayer(new CustomPlayer(player.getUniqueId()));
         }
     };
-    @Getter
-    @Setter
-    private Consumer<AsyncPlayerPreLoginEvent> onPrePlayerJoin = player -> {
-        CustomPlayer customPlayer = null;
-        try {
-            customPlayer = load(player.getUniqueId());
-        } catch (FileNotFoundException _e) {}
-        if (customPlayer == null) {
-            addCustomPlayer(new CustomPlayer(player.getUniqueId()));
-        }
-    };
 
     @Setter
     private Class<? extends CustomPlayer> customPlayerClass;
 
-    @Setter
-    private Consumer<PlayerQuitEvent> onPlayerQuit = event -> {removeCustomPlayer(event.getPlayer().getUniqueId());};
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public CustomPlayer getCustomPlayer(UUID uuid) {
@@ -102,16 +89,30 @@ public class CustomPlayerManager implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        onPlayerJoin.accept(event.getPlayer());
+        Player player = event.getPlayer();
+
+        CustomPlayer customPlayer = null;
+        try {
+            customPlayer = load( player.getUniqueId() );
+        } catch (FileNotFoundException ignored) {}
+        if (customPlayer == null) {
+            addCustomPlayer(new CustomPlayer( player.getUniqueId() ));
+        }
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        onPlayerQuit.accept(event);
+        removeCustomPlayer(event.getPlayer().getUniqueId());
     }
 
     @EventHandler
     public void onPreJoin(AsyncPlayerPreLoginEvent event) {
-        onPrePlayerJoin.accept(event);
+        CustomPlayer customPlayer = null;
+        try {
+            customPlayer = load( event.getUniqueId());
+        } catch (FileNotFoundException ignored) {}
+        if (customPlayer == null) {
+            addCustomPlayer(new CustomPlayer( event.getUniqueId()));
+        }
     }
 }

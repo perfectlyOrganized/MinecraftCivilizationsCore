@@ -74,7 +74,7 @@ public class SearchSignGUI {
         ArrayList<ItemStack> materials = new ArrayList<>();
         for (Material material : Material.values()) {
             if (material.isItem() && material != Material.AIR) {
-                materials.add(ItemStack.of(material));
+                materials.add(new ItemStack(material));
             }
         }
         return materials;
@@ -86,7 +86,7 @@ public class SearchSignGUI {
             if ((material.isItem() || (material.isBlock() && material.isItem()))
                     && material != Material.AIR
                     && material.name().toUpperCase().contains(search.toUpperCase())) {
-                materials.add(ItemStack.of(material));
+                materials.add(new ItemStack(material));
             }
         }
         return materials;
@@ -105,7 +105,7 @@ public class SearchSignGUI {
         ArrayList<ItemStack> materials = new ArrayList<>();
         for (Material material : Material.values()) {
             if (material.isItem() && material.isBlock() && material != Material.AIR) {
-                materials.add(ItemStack.of(material));
+                materials.add(new ItemStack(material));
             }
         }
         return materials;
